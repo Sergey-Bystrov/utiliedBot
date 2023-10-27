@@ -2,10 +2,10 @@ package com.ru.configuration.utiliedBot.model;
 
 import com.pengrad.telegrambot.request.SendPhoto;
 
-public class messagePhotoDto {
+public class MessagePhotoDto {
     private SendPhoto photo;
 
-    public messagePhotoDto(SendPhoto photo) {
+    public MessagePhotoDto(SendPhoto photo) {
         this.photo = photo;
     }
 

@@ -1,8 +1,11 @@
 package com.ru.configuration.utiliedBot.bot.botinterface;
 
+import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
+import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.ru.configuration.utiliedBot.constants.TelegrammCommands;
+import com.ru.configuration.utiliedBot.repository.Addresses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -21,6 +24,13 @@ public abstract class ScreenReplyMarkup {
     protected SendMessage getStartScreenReplyMarkup(long chatId, String text) {
         return new SendMessage(chatId, text).replyMarkup(new ReplyKeyboardMarkup(new String[]{command.PRICE}, new String[]{command.HELPER}, new String[]{command.ADRESSES}));
     }
+    protected SendMessage getAddressesScreenReplyMarkup(long chatId, String text) {
+        //return new SendMessage(chatId, text).replyMarkup(new ReplyKeyboardMarkup(new String[]{command.PRICE}, new String[]{command.HELPER}));
+        return new SendMessage(chatId, text).replyMarkup(new InlineKeyboardMarkup(
+                new InlineKeyboardButton("Адрес").url(Addresses.addressesYandexMap.get("default")),
+                new InlineKeyboardButton("Адрес").url(Addresses.addressesYandexMap.get("default"))
+                ));
+    }
     protected SendMessage getPriceScreenReplyMarkup(long chatId, String text) {
         return new SendMessage(chatId, text).replyMarkup(new ReplyKeyboardMarkup(
                 new String[]{command.WASTE_PAPER},
@@ -35,7 +45,7 @@ public abstract class ScreenReplyMarkup {
         }else if(command.HELPER.equals(text)){
             return getStartScreenReplyMarkup(chatId, command.HELPER);
         }else if(command.ADRESSES.equals(text)){
-            return getStartScreenReplyMarkup(chatId, command.ADRESSES);
+            return getAddressesScreenReplyMarkup(chatId, command.ADRESSES);
         }else if(command.WASTE_PAPER.equals(text)){
             return getStartScreenReplyMarkup(chatId, command.WASTE_PAPER);
         }else if(command.PLASTIC.equals(text)){
@@ -47,7 +57,7 @@ public abstract class ScreenReplyMarkup {
         }else if(command.BACK.equals(text)){
             return getStartScreenReplyMarkup(chatId, command.BACK);
         }else return getStartScreenReplyMarkup(chatId, "NOT_FOUND");
-
+    }
 /*        String response = "NOT_FOUND";
         switch (text) {
             case (command.PRICE):
@@ -77,6 +87,4 @@ public abstract class ScreenReplyMarkup {
                 response = text;
         }
         return getStartScreenReplyMarkup(chatId, response);*/
-    }
-
 }
