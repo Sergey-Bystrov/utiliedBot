@@ -9,6 +9,8 @@ import com.ru.configuration.utiliedBot.repository.Addresses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import static com.ru.configuration.utiliedBot.enums.Location.DEFAULT;
+
 public abstract class ScreenReplyMarkup {
     @Autowired
     protected TelegrammCommands command;
@@ -27,8 +29,8 @@ public abstract class ScreenReplyMarkup {
     protected SendMessage getAddressesScreenReplyMarkup(long chatId, String text) {
         //return new SendMessage(chatId, text).replyMarkup(new ReplyKeyboardMarkup(new String[]{command.PRICE}, new String[]{command.HELPER}));
         return new SendMessage(chatId, text).replyMarkup(new InlineKeyboardMarkup(
-                new InlineKeyboardButton("Адрес").url(Addresses.addressesYandexMap.get("default")),
-                new InlineKeyboardButton("Адрес").url(Addresses.addressesYandexMap.get("default"))
+                new InlineKeyboardButton("Адрес").url(Addresses.addressesYandexMap.get(DEFAULT.getName())),
+                new InlineKeyboardButton("Адрес").url(Addresses.addressesYandexMap.get(DEFAULT.getName()))
                 ));
     }
     protected SendMessage getPriceScreenReplyMarkup(long chatId, String text) {
