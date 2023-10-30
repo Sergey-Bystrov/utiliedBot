@@ -9,6 +9,8 @@ import com.ru.configuration.utiliedBot.repository.Addresses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import static com.ru.configuration.utiliedBot.enums.Location.DEFAULT;
+
 public abstract class ScreenReplyMarkup {
     @Autowired
     protected TelegrammCommands command;
@@ -19,18 +21,27 @@ public abstract class ScreenReplyMarkup {
     public ScreenReplyMarkup(){
 
     }
+
     //todo поменять все константы команд на переменные, передающиеся в конструктор класса для реализации абстракции с точки зрения бизнес логики.
     // Либо завести абстракные командв на подобие КОМАНДА1 и тд
     protected SendMessage getStartScreenReplyMarkup(long chatId, String text) {
-        return new SendMessage(chatId, text).replyMarkup(new ReplyKeyboardMarkup(new String[]{command.PRICE}, new String[]{command.HELPER}, new String[]{command.ADRESSES}));
+        return new SendMessage(chatId, text)
+                .replyMarkup(new ReplyKeyboardMarkup(
+                                new String[]{command.PRICE},
+                                new String[]{command.HELPER},
+                                new String[]{command.ADDRESSES}
+                        )
+                );
     }
+
     protected SendMessage getAddressesScreenReplyMarkup(long chatId, String text) {
         //return new SendMessage(chatId, text).replyMarkup(new ReplyKeyboardMarkup(new String[]{command.PRICE}, new String[]{command.HELPER}));
         return new SendMessage(chatId, text).replyMarkup(new InlineKeyboardMarkup(
-                new InlineKeyboardButton("Адрес").url(Addresses.addressesYandexMap.get("default")),
-                new InlineKeyboardButton("Адрес").url(Addresses.addressesYandexMap.get("default"))
+                new InlineKeyboardButton("Адрес").url(Addresses.addressesYandexMap.get(DEFAULT.getName())),
+                new InlineKeyboardButton("Адрес").url(Addresses.addressesYandexMap.get(DEFAULT.getName()))
                 ));
     }
+
     protected SendMessage getPriceScreenReplyMarkup(long chatId, String text) {
         return new SendMessage(chatId, text).replyMarkup(new ReplyKeyboardMarkup(
                 new String[]{command.WASTE_PAPER},
@@ -38,14 +49,15 @@ public abstract class ScreenReplyMarkup {
                 new String[]{command.ALL_POSITIONS},
                 new String[]{command.BACK}));
     }
+
     protected SendMessage getStartKeyboard(long chatId, String text) {
 
         if (command.PRICE.equals(text)){
             return getPriceScreenReplyMarkup(chatId,command.PRICE);
         }else if(command.HELPER.equals(text)){
             return getStartScreenReplyMarkup(chatId, command.HELPER);
-        }else if(command.ADRESSES.equals(text)){
-            return getAddressesScreenReplyMarkup(chatId, command.ADRESSES);
+        }else if(command.ADDRESSES.equals(text)){
+            return getAddressesScreenReplyMarkup(chatId, command.ADDRESSES);
         }else if(command.WASTE_PAPER.equals(text)){
             return getStartScreenReplyMarkup(chatId, command.WASTE_PAPER);
         }else if(command.PLASTIC.equals(text)){

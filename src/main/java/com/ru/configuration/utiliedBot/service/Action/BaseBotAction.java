@@ -15,8 +15,12 @@ import com.ru.configuration.utiliedBot.constants.Errors;
 import com.ru.configuration.utiliedBot.exceptions.UtiliedBotExceptions;
 import com.ru.configuration.utiliedBot.repository.Addresses;
 import com.ru.configuration.utiliedBot.repository.MessagesForUser;
-import com.ru.configuration.utiliedBot.service.Log.Loger;
+import lombok.extern.slf4j.Slf4j;
 
+import static com.ru.configuration.utiliedBot.enums.Location.KOSTROMA;
+import static com.ru.configuration.utiliedBot.enums.Location.SHARYA;
+
+@Slf4j
 public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
     private TelegramBot telegramBot;
     private String botToken;
@@ -31,7 +35,7 @@ public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
     public void checkBotStatus() {
         GetMe getMe = new GetMe();
         GetMeResponse botUser = telegramBot.execute(getMe);
-        Loger.logInfo("Bot username: " + botUser.toString());
+        log.info("Bot username: " + botUser.toString());
     }
 
     @Override
@@ -56,31 +60,32 @@ public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
             try {
                 handlePhoto(inputMessage);
             } catch (UtiliedBotExceptions e) {
-                Loger.logExceptionInfo(Errors.errors.get("HANDLE_PHOTO_ERROR"), e);
+                log.error(Errors.errors.get("HANDLE_PHOTO_ERROR"), e);
             }
         } else if (inputMessage.video() != null) {
             try {
                 handleVideo(inputMessage);
             } catch (UtiliedBotExceptions e) {
-                Loger.logExceptionInfo(Errors.errors.get("HANDLE_VIDEO_ERROR"), e);
+                log.error(Errors.errors.get("HANDLE_VIDEO_ERROR"), e);
             }
         }
         return getStartKeyboard(inputMessage.chat().id(), inputMessage.text());
     }
+
     //todo сейчас фото и видео пересылаются обратно в тот же чат нужно решить куда их надо отправлять
     protected void handlePhoto(Message message) throws UtiliedBotExceptions {
         PhotoSize[] photoInputArray = message.photo();
         int photoArraySize = message.photo().length;
         if (photoArraySize != 0) {
             telegramBot.execute(new SendPhoto(message.chat().id(), photoInputArray[0].fileId()));
-        } else throw new UtiliedBotExceptions();
+        } else throw new UtiliedBotExceptions("Error while processing photo");
     }
 
     protected void handleVideo(Message message) throws UtiliedBotExceptions {
         Video inputVideo = message.video();
         if (inputVideo.fileSize() != null) {
             telegramBot.execute(new SendVideo(message.chat().id(), inputVideo.fileId()));
-        }else throw new UtiliedBotExceptions();
+        }else throw new UtiliedBotExceptions("Error while handling video");
     }
 
     @Override
@@ -90,7 +95,7 @@ public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
             return getPriceScreenReplyMarkup(chatId, command.PRICE);
         } else if (command.HELPER.equals(text)) {
             return getStartScreenReplyMarkup(chatId, MessagesForUser.messageForUser.get("helperMessage"));
-        } else if (command.ADRESSES.equals(text)) {
+        } else if (command.ADDRESSES.equals(text)) {
             return getAddressesScreenReplyMarkup(chatId, MessagesForUser.messageForUser.get("ourAddresses"));
         } else if (command.WASTE_PAPER.equals(text)) {
             return getStartScreenReplyMarkup(chatId, command.WASTE_PAPER);
@@ -108,10 +113,8 @@ public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
     @Override
     protected SendMessage getAddressesScreenReplyMarkup(long chatId, String text) {
         return new SendMessage(chatId, text).replyMarkup(new InlineKeyboardMarkup(
-                new InlineKeyboardButton("Кострома").url(Addresses.addressesYandexMap.get("Кострома")),
-                new InlineKeyboardButton("Шарья").url(Addresses.addressesYandexMap.get("Шарья"))
+                new InlineKeyboardButton(KOSTROMA.getName()).url(Addresses.addressesYandexMap.get(KOSTROMA.getName())),
+                new InlineKeyboardButton(SHARYA.getName()).url(Addresses.addressesYandexMap.get(SHARYA.getName()))
         ));
     }
-
-
 }

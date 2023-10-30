@@ -1,6 +1,5 @@
 package com.ru.configuration.utiliedBot;
 
-import com.ru.configuration.utiliedBot.bot.botImplementation.UtiliedBot;
 import com.ru.configuration.utiliedBot.bot.botImplementation.UtiliedBotStarter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
