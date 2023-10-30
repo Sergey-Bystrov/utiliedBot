@@ -1,7 +1,7 @@
 package com.ru.configuration.utiliedBot.bot.botImplementation;
 
 import com.pengrad.telegrambot.TelegramBot;
-import com.ru.configuration.utiliedBot.service.Action.BaseBotAction;
+import com.ru.configuration.utiliedBot.service.action.BaseBotAction;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;

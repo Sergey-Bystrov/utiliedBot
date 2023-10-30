@@ -1,4 +1,4 @@
-package com.ru.configuration.utiliedBot.service.Action;
+package com.ru.configuration.utiliedBot.service.action;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
@@ -12,19 +12,25 @@ import com.pengrad.telegrambot.response.GetMeResponse;
 import com.ru.configuration.utiliedBot.bot.botinterface.BaseBotActions;
 import com.ru.configuration.utiliedBot.bot.botinterface.ScreenReplyMarkup;
 import com.ru.configuration.utiliedBot.constants.Errors;
+import com.ru.configuration.utiliedBot.enums.UtilType;
 import com.ru.configuration.utiliedBot.exceptions.UtiliedBotExceptions;
 import com.ru.configuration.utiliedBot.repository.Addresses;
 import com.ru.configuration.utiliedBot.repository.MessagesForUser;
+import com.ru.configuration.utiliedBot.service.messages.MultipleTypesMessageInterface;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Arrays;
 
 import static com.ru.configuration.utiliedBot.enums.Location.KOSTROMA;
 import static com.ru.configuration.utiliedBot.enums.Location.SHARYA;
+import static com.ru.configuration.utiliedBot.enums.UtilType.*;
 
 @Slf4j
 public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
     private TelegramBot telegramBot;
     private String botToken;
     private String stringChatId;
+    private MultipleTypesMessageInterface<UtilType> priceMessageService;
 
     public BaseBotAction(TelegramBot telegramBot, String botToken, String stringChatId) {
         this.telegramBot = telegramBot;
@@ -68,6 +74,8 @@ public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
             } catch (UtiliedBotExceptions e) {
                 log.error(Errors.errors.get("HANDLE_VIDEO_ERROR"), e);
             }
+        } else if (inputMessage.text() != null) {
+            return getStartKeyboard(inputMessage.chat().id(), inputMessage.text());
         }
         return getStartKeyboard(inputMessage.chat().id(), inputMessage.text());
     }
@@ -98,13 +106,14 @@ public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
         } else if (command.ADDRESSES.equals(text)) {
             return getAddressesScreenReplyMarkup(chatId, MessagesForUser.messageForUser.get("ourAddresses"));
         } else if (command.WASTE_PAPER.equals(text)) {
-            return getStartScreenReplyMarkup(chatId, command.WASTE_PAPER);
+            return getStartScreenReplyMarkup(chatId, priceMessageService.getByType(WASTE_PAPER));
         } else if (command.PLASTIC.equals(text)) {
-            return getStartScreenReplyMarkup(chatId, command.PLASTIC);
+            return getStartScreenReplyMarkup(chatId, priceMessageService.getByType(PLASTIC));
         } else if (command.PLASTIC_FILM.equals(text)) {
-            return getStartScreenReplyMarkup(chatId, command.PLASTIC_FILM);
+            return getStartScreenReplyMarkup(chatId, priceMessageService.getByType(MEMBRANE));
         } else if (command.ALL_POSITIONS.equals(text)) {
-            return getStartScreenReplyMarkup(chatId, command.ALL_POSITIONS);
+            return getStartScreenReplyMarkup(chatId,
+                    priceMessageService.getByAllTypes(Arrays.stream(values()).toList()));
         } else if (command.BACK.equals(text)) {
             return getStartScreenReplyMarkup(chatId, command.BACK);
         } else return getStartScreenReplyMarkup(chatId, "NOT_FOUND");
