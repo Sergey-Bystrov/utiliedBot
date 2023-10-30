@@ -71,20 +71,21 @@ public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
         }
         return getStartKeyboard(inputMessage.chat().id(), inputMessage.text());
     }
+
     //todo сейчас фото и видео пересылаются обратно в тот же чат нужно решить куда их надо отправлять
     protected void handlePhoto(Message message) throws UtiliedBotExceptions {
         PhotoSize[] photoInputArray = message.photo();
         int photoArraySize = message.photo().length;
         if (photoArraySize != 0) {
             telegramBot.execute(new SendPhoto(message.chat().id(), photoInputArray[0].fileId()));
-        } else throw new UtiliedBotExceptions();
+        } else throw new UtiliedBotExceptions("Error while processing photo");
     }
 
     protected void handleVideo(Message message) throws UtiliedBotExceptions {
         Video inputVideo = message.video();
         if (inputVideo.fileSize() != null) {
             telegramBot.execute(new SendVideo(message.chat().id(), inputVideo.fileId()));
-        }else throw new UtiliedBotExceptions();
+        }else throw new UtiliedBotExceptions("Error while handling video");
     }
 
     @Override
@@ -94,7 +95,7 @@ public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
             return getPriceScreenReplyMarkup(chatId, command.PRICE);
         } else if (command.HELPER.equals(text)) {
             return getStartScreenReplyMarkup(chatId, MessagesForUser.messageForUser.get("helperMessage"));
-        } else if (command.ADRESSES.equals(text)) {
+        } else if (command.ADDRESSES.equals(text)) {
             return getAddressesScreenReplyMarkup(chatId, MessagesForUser.messageForUser.get("ourAddresses"));
         } else if (command.WASTE_PAPER.equals(text)) {
             return getStartScreenReplyMarkup(chatId, command.WASTE_PAPER);
@@ -116,6 +117,4 @@ public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
                 new InlineKeyboardButton(SHARYA.getName()).url(Addresses.addressesYandexMap.get(SHARYA.getName()))
         ));
     }
-
-
 }
