@@ -12,8 +12,6 @@ import java.util.stream.IntStream;
 
 @Service
 public class PriceMessageService implements MultipleTypesMessageInterface<UtilType> {
-    private final static String PRICE_HEADER = "Актуальный прайс";
-
     /**
      * Method returns message by its type
      * @param type - message type
@@ -37,9 +35,14 @@ public class PriceMessageService implements MultipleTypesMessageInterface<UtilTy
         return message.toString();
     }
 
+    /**
+     * Method returns composed message by all types
+     * @param types - all message types
+     * @return String represents message ready to be sent
+     */
     @Override
-    public String getByAllTypes(Collection<UtilType> type) {
-        return type.stream()
+    public String getByAllTypes(Collection<UtilType> types) {
+        return types.stream()
                 .map(this::getByType)
                 .collect(Collectors.joining("\n\n"));
     }
