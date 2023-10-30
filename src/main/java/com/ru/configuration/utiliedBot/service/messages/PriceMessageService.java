@@ -20,8 +20,10 @@ public class PriceMessageService implements MultipleTypesMessageInterface<UtilTy
     @Override
     public String getByType(UtilType type) {
         StringBuilder message = new StringBuilder();
-        message.append(type.getTitle())
+        message.append("*")
+                .append(type.getTitle())
                 .append(":")
+                .append("*")
                 .append("\n");
         final List<String> positions = Arrays.stream(Price.values())
                 .filter(p -> p.getType().equals(type.ordinal()))
