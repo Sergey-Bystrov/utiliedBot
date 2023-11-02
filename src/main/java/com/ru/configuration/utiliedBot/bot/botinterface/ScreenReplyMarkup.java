@@ -2,6 +2,7 @@ package com.ru.configuration.utiliedBot.bot.botinterface;
 
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
+import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.ru.configuration.utiliedBot.constants.TelegrammCommands;
@@ -26,6 +27,7 @@ public abstract class ScreenReplyMarkup {
     // Либо завести абстракные командв на подобие КОМАНДА1 и тд
     protected SendMessage getStartScreenReplyMarkup(long chatId, String text) {
         return new SendMessage(chatId, text)
+                .parseMode(ParseMode.Markdown)
                 .replyMarkup(new ReplyKeyboardMarkup(
                                 new String[]{command.PRICE},
                                 new String[]{command.HELPER},
