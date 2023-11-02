@@ -1,8 +1,9 @@
 package com.ru.configuration.utiliedBot.bot.botImplementation;
 
 import com.pengrad.telegrambot.TelegramBot;
-import com.ru.configuration.utiliedBot.service.Action.BaseBotAction;
+import com.ru.configuration.utiliedBot.service.Action.UserBotAction;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
@@ -10,21 +11,18 @@ import org.springframework.stereotype.Component;
 @Component
 @PropertySource("classpath:application.properties")
 public class UtiliedBot {
-    private TelegramBot telegramBot;
-    @Value("${bot.token}")
-    private String botToken;
-    @Value("${bot.chat.id}")
-    private String stringChatId;
-    private BaseBotAction bot;
+    private TelegramBot userTelegramBot;
+    private UserBotAction bot;
 
-    @PostConstruct
-    public void UtiliedBot() {
-        telegramBot = new TelegramBot(botToken);
-        this.bot = new BaseBotAction(telegramBot, botToken, stringChatId);
+    @Autowired
+    //@PostConstruct
+    public UtiliedBot(TelegramBot userTelegramBot, String userBotChatId) {
+        this.userTelegramBot = userTelegramBot;
+        this.bot = new UserBotAction(userTelegramBot, userBotChatId);
     }
 
     public void run() {
-        bot.handle();
+        bot.handle(userTelegramBot);
     }
 
 }

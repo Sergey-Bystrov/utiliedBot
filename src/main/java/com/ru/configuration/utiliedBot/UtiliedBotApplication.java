@@ -1,6 +1,6 @@
 package com.ru.configuration.utiliedBot;
 
-import com.ru.configuration.utiliedBot.bot.botImplementation.UtiliedBotStarter;
+import com.ru.configuration.utiliedBot.bot.botImplementation.BotsStarter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,7 +11,7 @@ import org.springframework.context.event.EventListener;
 public class UtiliedBotApplication {
 
 	@Autowired
-	private UtiliedBotStarter utiliedBotStarter;
+	private BotsStarter botsStarter;
 
 	public static void main(String[] args) {
 		SpringApplication.run(UtiliedBotApplication.class, args);
@@ -19,7 +19,7 @@ public class UtiliedBotApplication {
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void runBot() {
-		utiliedBotStarter.start();
+		botsStarter.startBot();
 	}
 
 

@@ -12,4 +12,5 @@ public class TelegrammCommands {
     public static final String PLASTIC_FILM = "ПЛЁНКА";
     public static final String ALL_POSITIONS = "ВСЕ ПОЗИЦИИ";
     public static final String BACK = "НАЗАД";
+    public static final String CHANGE_PRISE = "ИЗМЕНИТЬ РАСЦЕНКИ";
 }

@@ -1,5 +1,6 @@
 package com.ru.configuration.utiliedBot.bot.botinterface;
 
+import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
@@ -7,16 +8,12 @@ import com.pengrad.telegrambot.request.SendMessage;
 import com.ru.configuration.utiliedBot.constants.TelegrammCommands;
 import com.ru.configuration.utiliedBot.repository.Addresses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 import static com.ru.configuration.utiliedBot.enums.Location.DEFAULT;
 
 public abstract class ScreenReplyMarkup {
     @Autowired
     protected TelegrammCommands command;
-
-    @Value("${bot.chat.id}")
-    private String stringChatId;
 
     public ScreenReplyMarkup(){
 
@@ -70,6 +67,8 @@ public abstract class ScreenReplyMarkup {
             return getStartScreenReplyMarkup(chatId, command.BACK);
         }else return getStartScreenReplyMarkup(chatId, "NOT_FOUND");
     }
+
+    public abstract void checkBotStatus(TelegramBot telegramBot);
 /*        String response = "NOT_FOUND";
         switch (text) {
             case (command.PRICE):

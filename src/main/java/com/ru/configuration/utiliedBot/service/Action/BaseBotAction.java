@@ -5,66 +5,48 @@ import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.PhotoSize;
 import com.pengrad.telegrambot.model.Video;
-import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
-import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.*;
 import com.pengrad.telegrambot.response.GetMeResponse;
 import com.ru.configuration.utiliedBot.bot.botinterface.BaseBotActions;
 import com.ru.configuration.utiliedBot.bot.botinterface.ScreenReplyMarkup;
 import com.ru.configuration.utiliedBot.constants.Errors;
 import com.ru.configuration.utiliedBot.exceptions.UtiliedBotExceptions;
-import com.ru.configuration.utiliedBot.repository.Addresses;
-import com.ru.configuration.utiliedBot.repository.MessagesForUser;
 import lombok.extern.slf4j.Slf4j;
-
-import static com.ru.configuration.utiliedBot.enums.Location.KOSTROMA;
-import static com.ru.configuration.utiliedBot.enums.Location.SHARYA;
 
 @Slf4j
 public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
-    private TelegramBot telegramBot;
-    private String botToken;
-    private String stringChatId;
-
-    public BaseBotAction(TelegramBot telegramBot, String botToken, String stringChatId) {
-        this.telegramBot = telegramBot;
-        this.botToken = botToken;
-        this.stringChatId = stringChatId;
+    public BaseBotAction() {
     }
-
-    public void checkBotStatus() {
+    @Override
+    public void checkBotStatus(TelegramBot telegramBot) {
         GetMe getMe = new GetMe();
         GetMeResponse botUser = telegramBot.execute(getMe);
         log.info("Bot username: " + botUser.toString());
     }
 
     @Override
-    public void handle() {
-        listen();
+    public void handle(TelegramBot telegramBot) {
+        listen(telegramBot);
     }
-
-    protected void listen() {
+    @Override
+    public void listen(TelegramBot telegramBot) {
         telegramBot.setUpdatesListener(list -> {
-            list.forEach(update -> telegramBot.execute(handleUpdates(update)));
+            list.forEach(update -> telegramBot.execute(handleUpdates(update, telegramBot)));
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
         });
     }
 
-    protected void getStartKeyboard() {
-        //todo наша реализация
-    }
-
-    protected AbstractSendRequest handleUpdates(com.pengrad.telegrambot.model.Update update) {
+    protected AbstractSendRequest handleUpdates(com.pengrad.telegrambot.model.Update update, TelegramBot telegramBot) {
         Message inputMessage = update.message();
         if (inputMessage.photo() != null) {
             try {
-                handlePhoto(inputMessage);
+                handlePhoto(inputMessage, telegramBot);
             } catch (UtiliedBotExceptions e) {
                 log.error(Errors.errors.get("HANDLE_PHOTO_ERROR"), e);
             }
         } else if (inputMessage.video() != null) {
             try {
-                handleVideo(inputMessage);
+                handleVideo(inputMessage, telegramBot);
             } catch (UtiliedBotExceptions e) {
                 log.error(Errors.errors.get("HANDLE_VIDEO_ERROR"), e);
             }
@@ -73,7 +55,7 @@ public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
     }
 
     //todo сейчас фото и видео пересылаются обратно в тот же чат нужно решить куда их надо отправлять
-    protected void handlePhoto(Message message) throws UtiliedBotExceptions {
+    protected void handlePhoto(Message message, TelegramBot telegramBot) throws UtiliedBotExceptions {
         PhotoSize[] photoInputArray = message.photo();
         int photoArraySize = message.photo().length;
         if (photoArraySize != 0) {
@@ -81,40 +63,10 @@ public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
         } else throw new UtiliedBotExceptions("Error while processing photo");
     }
 
-    protected void handleVideo(Message message) throws UtiliedBotExceptions {
+    protected void handleVideo(Message message, TelegramBot telegramBot) throws UtiliedBotExceptions {
         Video inputVideo = message.video();
         if (inputVideo.fileSize() != null) {
             telegramBot.execute(new SendVideo(message.chat().id(), inputVideo.fileId()));
         }else throw new UtiliedBotExceptions("Error while handling video");
-    }
-
-    @Override
-    protected SendMessage getStartKeyboard(long chatId, String text) {
-
-        if (command.PRICE.equals(text)) {
-            return getPriceScreenReplyMarkup(chatId, command.PRICE);
-        } else if (command.HELPER.equals(text)) {
-            return getStartScreenReplyMarkup(chatId, MessagesForUser.messageForUser.get("helperMessage"));
-        } else if (command.ADDRESSES.equals(text)) {
-            return getAddressesScreenReplyMarkup(chatId, MessagesForUser.messageForUser.get("ourAddresses"));
-        } else if (command.WASTE_PAPER.equals(text)) {
-            return getStartScreenReplyMarkup(chatId, command.WASTE_PAPER);
-        } else if (command.PLASTIC.equals(text)) {
-            return getStartScreenReplyMarkup(chatId, command.PLASTIC);
-        } else if (command.PLASTIC_FILM.equals(text)) {
-            return getStartScreenReplyMarkup(chatId, command.PLASTIC_FILM);
-        } else if (command.ALL_POSITIONS.equals(text)) {
-            return getStartScreenReplyMarkup(chatId, command.ALL_POSITIONS);
-        } else if (command.BACK.equals(text)) {
-            return getStartScreenReplyMarkup(chatId, command.BACK);
-        } else return getStartScreenReplyMarkup(chatId, "NOT_FOUND");
-    }
-
-    @Override
-    protected SendMessage getAddressesScreenReplyMarkup(long chatId, String text) {
-        return new SendMessage(chatId, text).replyMarkup(new InlineKeyboardMarkup(
-                new InlineKeyboardButton(KOSTROMA.getName()).url(Addresses.addressesYandexMap.get(KOSTROMA.getName())),
-                new InlineKeyboardButton(SHARYA.getName()).url(Addresses.addressesYandexMap.get(SHARYA.getName()))
-        ));
     }
 }
