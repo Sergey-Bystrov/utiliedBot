@@ -19,10 +19,10 @@ public enum Price {
     BOOKS_ETC(0, "Книги, газеты, журналы", BigDecimal.valueOf(6f)),
 
     /** PLASTIC */
-    BOTTLE(2, "Бутылки", BigDecimal.valueOf(12f)),
-    HOUSEHOLD_CHEMICAL_BOTTLES(2, "Флаконы из под бытовой химии", BigDecimal.valueOf(12f)),
-    CANS_BARRELS(2, "Канистры и бочки", BigDecimal.valueOf(12f)),
-    LID(2, "Крышечки", BigDecimal.valueOf(15f)),
+    BOTTLE(1, "Бутылки", BigDecimal.valueOf(12f)),
+    HOUSEHOLD_CHEMICAL_BOTTLES(1, "Флаконы из под бытовой химии", BigDecimal.valueOf(12f)),
+    CANS_BARRELS(1, "Канистры и бочки", BigDecimal.valueOf(12f)),
+    LID(1, "Крышечки", BigDecimal.valueOf(15f)),
 
     /** MEMBRANE */
     STRATCH(2, "Стрейч", BigDecimal.valueOf(15f)),

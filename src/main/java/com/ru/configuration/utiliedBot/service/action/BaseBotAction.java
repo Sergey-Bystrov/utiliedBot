@@ -32,10 +32,12 @@ public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
     private String stringChatId;
     private MultipleTypesMessageInterface<UtilType> priceMessageService;
 
-    public BaseBotAction(TelegramBot telegramBot, String botToken, String stringChatId) {
+    public BaseBotAction(TelegramBot telegramBot, String botToken, String stringChatId,
+                         MultipleTypesMessageInterface<UtilType> priceMessageService) {
         this.telegramBot = telegramBot;
         this.botToken = botToken;
         this.stringChatId = stringChatId;
+        this.priceMessageService = priceMessageService;
     }
 
     public void checkBotStatus() {

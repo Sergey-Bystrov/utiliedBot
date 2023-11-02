@@ -31,7 +31,7 @@ public class PriceMessageService implements MultipleTypesMessageInterface<UtilTy
                 .collect(Collectors.toList());
         String positionsWithIndexes = IntStream
                 .range(0, positions.size())
-                .mapToObj(i -> i + ". " + positions.get(i))
+                .mapToObj(i -> (i + 1) + ". " + positions.get(i))
                 .collect(Collectors.joining("\n"));
         message.append(positionsWithIndexes);
         return message.toString();
