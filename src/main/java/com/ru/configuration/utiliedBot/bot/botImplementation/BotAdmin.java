@@ -1,11 +1,9 @@
 package com.ru.configuration.utiliedBot.bot.botImplementation;
 
 import com.pengrad.telegrambot.TelegramBot;
-import com.ru.configuration.utiliedBot.service.Action.AdminBotAction;
-import com.ru.configuration.utiliedBot.service.Action.BaseBotAction;
-import jakarta.annotation.PostConstruct;
+import com.ru.configuration.utiliedBot.service.action.AdminBotAction;
+import com.ru.configuration.utiliedBot.service.action.BaseBotAction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,8 +1,12 @@
-package com.ru.configuration.utiliedBot.service.Action;
+package com.ru.configuration.utiliedBot.service.action;
 
 import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.model.Message;
+import com.pengrad.telegrambot.model.PhotoSize;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.request.SendPhoto;
+import com.ru.configuration.utiliedBot.exceptions.UtiliedBotExceptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +23,7 @@ public class AdminBotAction extends BaseBotAction {
     public AdminBotAction(TelegramBot adminTelegramBot, String adminBotChatId) {
         this.adminTelegramBot = adminTelegramBot;
         this.adminBotChatId = adminBotChatId;
+        super.setAdminTelegramBot(adminTelegramBot);
     }
 
     @Override
@@ -35,6 +40,14 @@ public class AdminBotAction extends BaseBotAction {
         if (command.CHANGE_PRISE.equals(text)) {
             return getPriceScreenReplyMarkup(chatId, command.CHANGE_PRISE);
         } else return getStartScreenReplyMarkup(chatId, "NOT_FOUND");
+    }
+
+    protected void handlePhoto(Message message) throws UtiliedBotExceptions {
+        PhotoSize[] photoInputArray = message.photo();
+        int photoArraySize = message.photo().length;
+        if (photoArraySize != 0) {
+            adminTelegramBot.execute(new SendPhoto(adminBotChatId, photoInputArray[0].fileId()));
+        } else throw new UtiliedBotExceptions("Error while processing photo");
     }
 
 

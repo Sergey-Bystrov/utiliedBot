@@ -1,4 +1,4 @@
-package com.ru.configuration.utiliedBot.service.Action;
+package com.ru.configuration.utiliedBot.service.action;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
@@ -12,11 +12,28 @@ import com.ru.configuration.utiliedBot.bot.botinterface.ScreenReplyMarkup;
 import com.ru.configuration.utiliedBot.constants.Errors;
 import com.ru.configuration.utiliedBot.exceptions.UtiliedBotExceptions;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 @Slf4j
+@Component
 public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
+    private TelegramBot adminTelegramBot;
+
+    @Autowired
+    public void setAdminTelegramBot(TelegramBot adminTelegramBot) {
+        this.adminTelegramBot = adminTelegramBot;
+    }
+
     public BaseBotAction() {
     }
+
+/*    @Autowired
+    private BaseBotAction(@Qualifier("adminTelegramBot") TelegramBot adminTelegramBot) {
+        this.adminTelegramBot = adminTelegramBot;
+    }*/
+
     @Override
     public void checkBotStatus(TelegramBot telegramBot) {
         GetMe getMe = new GetMe();
@@ -28,6 +45,7 @@ public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
     public void handle(TelegramBot telegramBot) {
         listen(telegramBot);
     }
+
     @Override
     public void listen(TelegramBot telegramBot) {
         telegramBot.setUpdatesListener(list -> {
@@ -36,17 +54,17 @@ public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
         });
     }
 
-    protected AbstractSendRequest handleUpdates(com.pengrad.telegrambot.model.Update update, TelegramBot telegramBot) {
+    protected AbstractSendRequest handleUpdates(com.pengrad.telegrambot.model.Update update, TelegramBot adminTelegramBot) {
         Message inputMessage = update.message();
         if (inputMessage.photo() != null) {
             try {
-                handlePhoto(inputMessage, telegramBot);
+                handlePhoto(inputMessage, adminTelegramBot);
             } catch (UtiliedBotExceptions e) {
                 log.error(Errors.errors.get("HANDLE_PHOTO_ERROR"), e);
             }
         } else if (inputMessage.video() != null) {
             try {
-                handleVideo(inputMessage, telegramBot);
+                handleVideo(inputMessage,adminTelegramBot);
             } catch (UtiliedBotExceptions e) {
                 log.error(Errors.errors.get("HANDLE_VIDEO_ERROR"), e);
             }
@@ -55,6 +73,7 @@ public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
     }
 
     //todo сейчас фото и видео пересылаются обратно в тот же чат нужно решить куда их надо отправлять
+
     protected void handlePhoto(Message message, TelegramBot telegramBot) throws UtiliedBotExceptions {
         PhotoSize[] photoInputArray = message.photo();
         int photoArraySize = message.photo().length;
@@ -67,6 +86,6 @@ public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
         Video inputVideo = message.video();
         if (inputVideo.fileSize() != null) {
             telegramBot.execute(new SendVideo(message.chat().id(), inputVideo.fileId()));
-        }else throw new UtiliedBotExceptions("Error while handling video");
+        } else throw new UtiliedBotExceptions("Error while handling video");
     }
 }
