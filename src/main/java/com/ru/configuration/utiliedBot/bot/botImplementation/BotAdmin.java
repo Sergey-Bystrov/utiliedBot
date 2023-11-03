@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BotAdmin {
-    private TelegramBot adminTelegramBot;
-    private BaseBotAction bot;
+    private final TelegramBot adminTelegramBot;
+    private final BaseBotAction bot;
 
     @Autowired
     //@PostConstruct

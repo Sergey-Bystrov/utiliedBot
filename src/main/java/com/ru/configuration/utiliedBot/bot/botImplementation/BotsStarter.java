@@ -8,10 +8,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BotsStarter implements BotStarter {
+
+    private final UtiliedBot utiliedBot;
+    private final BotAdmin botAdmin;
+
     @Autowired
-    private UtiliedBot utiliedBot;
-    @Autowired
-    private BotAdmin botAdmin;
+    public BotsStarter(UtiliedBot utiliedBot, BotAdmin botAdmin) {
+        this.utiliedBot = utiliedBot;
+        this.botAdmin = botAdmin;
+    }
+
     @Override
     public void startBot() {
         utiliedBot.run();
