@@ -1,14 +1,16 @@
 package com.ru.configuration.utiliedBot.service.action;
 
 import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.model.Message;
-import com.pengrad.telegrambot.model.PhotoSize;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SendPhoto;
+import com.pengrad.telegrambot.request.SendVideo;
+import com.pengrad.telegrambot.request.SendVideoNote;
 import com.ru.configuration.utiliedBot.exceptions.UtiliedBotExceptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.io.File;
 
 @Component
 public class AdminBotAction extends BaseBotAction {
@@ -42,11 +44,21 @@ public class AdminBotAction extends BaseBotAction {
         } else return getStartScreenReplyMarkup(chatId, "NOT_FOUND");
     }
 
-    protected void handlePhoto(Message message) throws UtiliedBotExceptions {
-        PhotoSize[] photoInputArray = message.photo();
-        int photoArraySize = message.photo().length;
-        if (photoArraySize != 0) {
-            adminTelegramBot.execute(new SendPhoto(adminBotChatId, photoInputArray[0].fileId()));
+    protected void handlePhoto(File file) throws UtiliedBotExceptions {
+        if (file != null) {
+            adminTelegramBot.execute(new SendPhoto(adminBotChatId, file));
+        } else throw new UtiliedBotExceptions("Error while processing photo");
+    }
+    //todo тут падал в runtime exception
+    protected void handleVideo(File file) throws UtiliedBotExceptions {
+        if (file != null) {
+            adminTelegramBot.execute(new SendVideo(adminBotChatId, file));
+        } else throw new UtiliedBotExceptions("Error while processing photo");
+    }
+
+    protected void handleVideoNote(File file) throws UtiliedBotExceptions {
+        if (file != null) {
+            adminTelegramBot.execute(new SendVideoNote(adminBotChatId, file));
         } else throw new UtiliedBotExceptions("Error while processing photo");
     }
 

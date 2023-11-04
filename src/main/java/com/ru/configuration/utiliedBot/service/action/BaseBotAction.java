@@ -5,16 +5,22 @@ import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.PhotoSize;
 import com.pengrad.telegrambot.model.Video;
+import com.pengrad.telegrambot.model.VideoNote;
 import com.pengrad.telegrambot.request.*;
+import com.pengrad.telegrambot.response.GetFileResponse;
 import com.pengrad.telegrambot.response.GetMeResponse;
 import com.ru.configuration.utiliedBot.bot.botinterface.BaseBotActions;
 import com.ru.configuration.utiliedBot.bot.botinterface.ScreenReplyMarkup;
 import com.ru.configuration.utiliedBot.constants.Errors;
+import com.ru.configuration.utiliedBot.constants.TelegrammCommands;
 import com.ru.configuration.utiliedBot.exceptions.UtiliedBotExceptions;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+
+import java.io.File;
+import java.io.IOException;
 
 @Slf4j
 @Component
@@ -82,10 +88,53 @@ public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
         } else throw new UtiliedBotExceptions("Error while processing photo");
     }
 
+    protected void savePhoto(Message inputPhoto, TelegramBot telegramBot){
+        int num = inputPhoto.photo().length - 1;
+        GetFile getFile = new GetFile(inputPhoto.photo()[num].fileId());
+        GetFileResponse file = telegramBot.execute(getFile);
+        try {
+            byte[] fileBytes = telegramBot.getFileContent(file.file());
+            FileUtils.writeByteArrayToFile(new File(TelegrammCommands.PHOTO_PATH), fileBytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void saveVideo(Message inputVideo, TelegramBot telegramBot){
+        //int num = inputVideo.video();
+        GetFile getFile = new GetFile(inputVideo.video().fileId());
+        GetFileResponse file = telegramBot.execute(getFile);
+        try {
+            byte[] fileBytes = telegramBot.getFileContent(file.file());
+            FileUtils.writeByteArrayToFile(new File(TelegrammCommands.VIDEO_PATH), fileBytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void saveVideoNote(Message inputVideo, TelegramBot telegramBot){
+        //int num = inputVideo.video();
+        GetFile getFile = new GetFile(inputVideo.videoNote().fileId());
+        GetFileResponse file = telegramBot.execute(getFile);
+        try {
+            byte[] fileBytes = telegramBot.getFileContent(file.file());
+            FileUtils.writeByteArrayToFile(new File(TelegrammCommands.VIDEO_PATH), fileBytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     protected void handleVideo(Message message, TelegramBot telegramBot) throws UtiliedBotExceptions {
         Video inputVideo = message.video();
         if (inputVideo.fileSize() != null) {
             telegramBot.execute(new SendVideo(message.chat().id(), inputVideo.fileId()));
+        } else throw new UtiliedBotExceptions("Error while handling video");
+    }
+
+    protected void handleVideoNote(Message message, TelegramBot telegramBot) throws UtiliedBotExceptions {
+        VideoNote inputVideoNote = message.videoNote();
+        if (inputVideoNote.fileSize() != null) {
+            telegramBot.execute(new SendVideoNote(message.chat().id(), inputVideoNote.fileId()));
         } else throw new UtiliedBotExceptions("Error while handling video");
     }
 }

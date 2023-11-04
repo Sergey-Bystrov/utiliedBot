@@ -13,4 +13,7 @@ public class TelegrammCommands {
     public static final String ALL_POSITIONS = "ВСЕ ПОЗИЦИИ";
     public static final String BACK = "НАЗАД";
     public static final String CHANGE_PRISE = "ИЗМЕНИТЬ РАСЦЕНКИ";
+    public static final String PHOTO_PATH = "src/main/java/com/ru/configuration/utiliedBot/repository/photo.jpeg";
+    public static final String VIDEO_PATH = "src/main/java/com/ru/configuration/utiliedBot/repository/video.mp4";
+
 }

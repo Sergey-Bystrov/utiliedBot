@@ -3,22 +3,22 @@ package com.ru.configuration.utiliedBot.service.action;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.PhotoSize;
-import com.pengrad.telegrambot.model.Video;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
-import com.pengrad.telegrambot.request.AbstractSendRequest;
-import com.pengrad.telegrambot.request.SendMessage;
-import com.pengrad.telegrambot.request.SendPhoto;
-import com.pengrad.telegrambot.request.SendVideo;
-import com.ru.configuration.utiliedBot.constants.Errors;
+import com.pengrad.telegrambot.request.*;
+import com.pengrad.telegrambot.response.GetFileResponse;
+import com.ru.configuration.utiliedBot.constants.TelegrammCommands;
 import com.ru.configuration.utiliedBot.enums.UtilType;
 import com.ru.configuration.utiliedBot.exceptions.UtiliedBotExceptions;
 import com.ru.configuration.utiliedBot.repository.Addresses;
 import com.ru.configuration.utiliedBot.repository.MessagesForUser;
 import com.ru.configuration.utiliedBot.service.messages.MultipleTypesMessageInterface;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 
 import static com.ru.configuration.utiliedBot.enums.Location.KOSTROMA;
@@ -26,7 +26,7 @@ import static com.ru.configuration.utiliedBot.enums.Location.SHARYA;
 import static com.ru.configuration.utiliedBot.enums.UtilType.*;
 
 @Component
-public class UserBotAction extends BaseBotAction{
+public class UserBotAction extends BaseBotAction {
     private TelegramBot userTelegramBot;
     private String userBotChatId;
     private TelegramBot adminTelegramBot;
@@ -81,14 +81,25 @@ public class UserBotAction extends BaseBotAction{
     protected AbstractSendRequest handleUpdates(com.pengrad.telegrambot.model.Update update, TelegramBot telegramBot) {
         Message inputMessage = update.message();
         if (inputMessage.photo() != null) {
+            savePhoto(inputMessage, userTelegramBot);
             try {
-                adminBotAction.handlePhoto(inputMessage);
+                adminBotAction.handlePhoto(new File(TelegrammCommands.PHOTO_PATH));
             } catch (UtiliedBotExceptions e) {
                 //log.error(Errors.errors.get("HANDLE_PHOTO_ERROR"), e);
             }
         } else if (inputMessage.video() != null) {
+            saveVideo(inputMessage, userTelegramBot);
             try {
-                handleVideo(inputMessage,adminTelegramBot);
+                adminBotAction.handleVideo(new File(TelegrammCommands.VIDEO_PATH));
+                //handleVideo(inputMessage,adminTelegramBot);
+            } catch (UtiliedBotExceptions e) {
+                //log.error(Errors.errors.get("HANDLE_VIDEO_ERROR"), e);
+            }
+        } else if(inputMessage.videoNote() != null){
+            saveVideoNote(inputMessage, userTelegramBot);
+            try {
+                adminBotAction.handleVideoNote(new File(TelegrammCommands.VIDEO_PATH));
+                //handleVideoNote(inputMessage,adminTelegramBot);
             } catch (UtiliedBotExceptions e) {
                 //log.error(Errors.errors.get("HANDLE_VIDEO_ERROR"), e);
             }
