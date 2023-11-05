@@ -41,7 +41,7 @@ public class UserBotAction extends BaseBotAction {
         this.userBotChatId = userBotChatId;
         this.priceMessageService = priceMessageService;
         this.adminTelegramBot = adminTelegramBot;
-        this.adminBotChatId =adminBotChatId;
+        this.adminBotChatId = adminBotChatId;
         this.adminBotAction = adminBotAction;
     }
     @Override

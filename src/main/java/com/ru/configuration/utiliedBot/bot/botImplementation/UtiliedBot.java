@@ -14,10 +14,7 @@ import org.springframework.stereotype.Component;
 public class UtiliedBot {
     private TelegramBot userTelegramBot;
     private UserBotAction bot;
-    private TelegramBot adminTelegramBot;
-    private String adminBotChatId;
-    private AdminBotAction adminBotAction;
-    private MultipleTypesMessageInterface<UtilType> priceMessageService;
+
     @Autowired
     //@PostConstruct
     public UtiliedBot(TelegramBot userTelegramBot, String userBotChatId, MultipleTypesMessageInterface<UtilType> priceMessageService,

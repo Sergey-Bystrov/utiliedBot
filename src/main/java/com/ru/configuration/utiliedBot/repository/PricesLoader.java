@@ -16,8 +16,6 @@ public class PricesLoader {
         this.dataFileName = "src/main/java/com/ru/configuration/utiliedBot/repository/prices.txt";
     }
 
-
-
     public void loadDataFromFile() {
         try (BufferedReader reader = new BufferedReader(new FileReader(dataFileName))) {
             String line;
@@ -34,7 +32,7 @@ public class PricesLoader {
         }
     }
 
-    private void saveDataToFile() {
+    public void saveDataToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(dataFileName))) {
             for (Map.Entry<String, Float> entry : priceValues.entrySet()) {
                 writer.write(entry.getKey() + "=" + entry.getValue());

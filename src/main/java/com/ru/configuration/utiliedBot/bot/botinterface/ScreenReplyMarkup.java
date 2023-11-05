@@ -45,6 +45,7 @@ public abstract class ScreenReplyMarkup {
         return new SendMessage(chatId, text).replyMarkup(new ReplyKeyboardMarkup(
                 new String[]{command.WASTE_PAPER},
                 new String[]{command.PLASTIC},
+                new String[]{command.PLASTIC_FILM},
                 new String[]{command.ALL_POSITIONS},
                 new String[]{command.BACK}));
     }
@@ -53,21 +54,21 @@ public abstract class ScreenReplyMarkup {
 
         if (command.PRICE.equals(text)){
             return getPriceScreenReplyMarkup(chatId,command.PRICE);
-        }else if(command.HELPER.equals(text)){
+        } else if(command.HELPER.equals(text)){
             return getStartScreenReplyMarkup(chatId, command.HELPER);
-        }else if(command.ADDRESSES.equals(text)){
+        } else if(command.ADDRESSES.equals(text)){
             return getAddressesScreenReplyMarkup(chatId, command.ADDRESSES);
-        }else if(command.WASTE_PAPER.equals(text)){
+        } else if(command.WASTE_PAPER.equals(text)){
             return getStartScreenReplyMarkup(chatId, command.WASTE_PAPER);
-        }else if(command.PLASTIC.equals(text)){
+        } else if(command.PLASTIC.equals(text)){
             return getStartScreenReplyMarkup(chatId, command.PLASTIC);
-        }else if(command.PLASTIC_FILM.equals(text)){
+        } else if(command.PLASTIC_FILM.equals(text)){
             return getStartScreenReplyMarkup(chatId, command.PLASTIC_FILM);
-        }else if(command.ALL_POSITIONS.equals(text)){
+        } else if(command.ALL_POSITIONS.equals(text)){
             return getStartScreenReplyMarkup(chatId, command.ALL_POSITIONS);
-        }else if(command.BACK.equals(text)){
+        } else if(command.BACK.equals(text)){
             return getStartScreenReplyMarkup(chatId, command.BACK);
-        }else return getStartScreenReplyMarkup(chatId, "NOT_FOUND");
+        } else return getStartScreenReplyMarkup(chatId, "NOT_FOUND");
     }
 
     public abstract void checkBotStatus(TelegramBot telegramBot);
