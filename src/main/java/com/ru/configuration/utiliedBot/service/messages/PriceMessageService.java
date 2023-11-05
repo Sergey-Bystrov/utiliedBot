@@ -2,6 +2,8 @@ package com.ru.configuration.utiliedBot.service.messages;
 
 import com.ru.configuration.utiliedBot.enums.Price;
 import com.ru.configuration.utiliedBot.enums.UtilType;
+import com.ru.configuration.utiliedBot.repository.PricesLoader;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -12,6 +14,12 @@ import java.util.stream.IntStream;
 
 @Service
 public class PriceMessageService implements MultipleTypesMessageInterface<UtilType> {
+    private PricesLoader pricesLoader;
+    @Autowired
+    public PriceMessageService(PricesLoader pricesLoader) {
+        this.pricesLoader = pricesLoader;
+    }
+
     /**
      * Method returns message by its type
      * @param type - message type
@@ -27,7 +35,7 @@ public class PriceMessageService implements MultipleTypesMessageInterface<UtilTy
                 .append("\n");
         final List<String> positions = Arrays.stream(Price.values())
                 .filter(p -> p.getType().equals(type.ordinal()))
-                .map(p -> p.getTitle() + " " + p.getAmount() + " " + p.getCurrency() + "/" + p.getMeasure())
+                .map(p -> p.getTitle() + " " + pricesLoader.getValue(p.getName()) + " " + p.getCurrency() + "/" + p.getMeasure())
                 .collect(Collectors.toList());
         String positionsWithIndexes = IntStream
                 .range(0, positions.size())

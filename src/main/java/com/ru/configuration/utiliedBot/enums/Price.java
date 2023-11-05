@@ -2,6 +2,7 @@ package com.ru.configuration.utiliedBot.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 
@@ -14,32 +15,32 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public enum Price {
     /** WASTE PAPER */
-    CARDBOARD(0, "Картон", BigDecimal.valueOf(5f)),
-    OFFICE_PAPER(0, "Офисная бумага", BigDecimal.valueOf(8f)),
-    BOOKS_ETC(0, "Книги, газеты, журналы", BigDecimal.valueOf(6f)),
+    CARDBOARD(0, "Картон", "cardboard"),
+    OFFICE_PAPER(0, "Офисная бумага", "officePaper"),
+    BOOKS_ETC(0, "Книги, газеты, журналы", "booksEtc"),
 
     /** PLASTIC */
-    BOTTLE(1, "Бутылки", BigDecimal.valueOf(12f)),
-    HOUSEHOLD_CHEMICAL_BOTTLES(1, "Флаконы из под бытовой химии", BigDecimal.valueOf(12f)),
-    CANS_BARRELS(1, "Канистры и бочки", BigDecimal.valueOf(12f)),
-    LID(1, "Крышечки", BigDecimal.valueOf(15f)),
+    BOTTLE(1, "Бутылки", "bottle"),
+    HOUSEHOLD_CHEMICAL_BOTTLES(1, "Флаконы из под бытовой химии", "householdChemicalBottles"),
+    CANS_BARRELS(1, "Канистры и бочки", "cansBarrels"),
+    LID(1, "Крышечки", "lid"),
 
     /** MEMBRANE */
-    STRATCH(2, "Стрейч", BigDecimal.valueOf(15f)),
-    COLORED_MEMBRANE(2, "Цветная", BigDecimal.valueOf(12f)),
-    PVD(2, "ПВД", BigDecimal.valueOf(15f)),
+    STRATCH(2, "Стрейч", "stratch"),
+    COLORED_MEMBRANE(2, "Цветная", "coloredMembrane"),
+    PVD(2, "ПВД", "pvd"),
     ;
 
     private Integer type;
     private String title;
-    private BigDecimal amount;
+    private String name;
     private String measure;
     private String currency;
 
-    Price(int type, String title, BigDecimal amount) {
+    Price(int type, String title, String name) {
         this.type = type;
         this.title = title;
-        this.amount = amount;
+        this.name = name;
         this.measure = "кг";
         this.currency = "руб.";
     }
