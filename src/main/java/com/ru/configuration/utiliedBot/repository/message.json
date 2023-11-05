@@ -1,0 +1,22 @@
+Message{
+  message_id=281,
+  message_thread_id=null,
+  from=User{
+  id=922860758,
+  is_bot=false,
+  first_name=
+  'Сергей',
+  last_name=
+  'Быстров',
+  username=
+  'Bistrov_Sergei',
+  language_code=
+  'ru',
+  is_premium=
+  'null',
+  added_to_attachment_menu=
+  'null',
+  can_join_groups=null,
+  can_read_all_group_messages=null,
+  supports_inline_queries=null
+}, sender_chat=null, date=1699172922, chat=Chat{id=922860758, type=Private, first_name='Сергей', last_name='Быстров', is_forum=null, username='Bistrov_Sergei', title='null', photo=null, active_usernames=null, emoji_status_custom_emoji_id='null', emoji_status_expiration_date='null', bio='null', has_private_forwards=null, has_restricted_voice_and_video_messages=null, has_hidden_members=null, has_aggressive_anti_spam_enabled=null, join_to_send_messages=null, join_by_request=null, description='null', invite_link='null', pinned_message=null, permissions=null, slow_mode_delay=null, message_auto_delete_time=null, has_protected_content=null, sticker_set_name='null', can_set_sticker_set=null, linked_chat_id=null, location=null}, forward_from=null, forward_from_chat=null, forward_from_message_id=null, forward_signature='null', forward_sender_name='null', forward_date=null, is_topic_message=null, is_automatic_forward=null, reply_to_message=null, via_bot=null, edit_date=null, has_protected_content=null, has_media_spoiler=null, media_group_id='null', author_signature='null', text='null', entities=null, caption_entities=null, audio=null, document=null, animation=null, game=null, photo=[PhotoSize{file_id='AgACAgIAAxkBAAIBGWVHUjpWhdcEBN1AvTWCvm0NEqDeAALHzjEbgtw4Spje7TWM5IhtAQADAgADcwADMwQ', file_unique_id='AQADx84xG4LcOEp4', width=40, height=90, file_size=827}, PhotoSize{file_id='AgACAgIAAxkBAAIBGWVHUjpWhdcEBN1AvTWCvm0NEqDeAALHzjEbgtw4Spje7TWM5IhtAQADAgADbQADMwQ', file_unique_id='AQADx84xG4LcOEpy', width=144, height=320, file_size=6951}, PhotoSize{file_id='AgACAgIAAxkBAAIBGWVHUjpWhdcEBN1AvTWCvm0NEqDeAALHzjEbgtw4Spje7TWM5IhtAQADAgADeAADMwQ', file_unique_id='AQADx84xG4LcOEp9', width=360, height=800, file_size=20279}, PhotoSize{file_id='AgACAgIAAxkBAAIBGWVHUjpWhdcEBN1AvTWCvm0NEqDeAALHzjEbgtw4Spje7TWM5IhtAQADAgADeQADMwQ', file_unique_id='AQADx84xG4LcOEp-', width=576, height=1280, file_size=33260}], sticker=null, video=null, voice=null, video_note=null, caption='null', contact=null, location=null, venue=null, poll=null, dice=null, new_chat_members=null, left_chat_member=null, new_chat_title='null', new_chat_photo=null, delete_chat_photo=null, group_chat_created=null, supergroup_chat_created=null, channel_chat_created=null, message_auto_delete_timer_changed=null, migrate_to_chat_id=null, migrate_from_chat_id=null, pinned_message=null, invoice=null, successful_payment=null, story=null, user_shared=null, chat_shared=null, connected_website='null', passport_data=null, proximity_alert_triggered=null, forum_topic_created=null, forum_topic_edited=null, forum_topic_closed=null, forum_topic_reopened=null, general_forum_topic_hidden=null, general_forum_topic_unhidden=null, write_access_allowed=null, video_chat_started=null, video_chat_ended=null, video_chat_participants_invited=null, video_chat_scheduled=null, reply_markup=null, web_app_data=null}

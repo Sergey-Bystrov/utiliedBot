@@ -2,10 +2,7 @@ package com.ru.configuration.utiliedBot.service.action;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
-import com.pengrad.telegrambot.model.Message;
-import com.pengrad.telegrambot.model.PhotoSize;
-import com.pengrad.telegrambot.model.Video;
-import com.pengrad.telegrambot.model.VideoNote;
+import com.pengrad.telegrambot.model.*;
 import com.pengrad.telegrambot.request.*;
 import com.pengrad.telegrambot.response.GetFileResponse;
 import com.pengrad.telegrambot.response.GetMeResponse;
@@ -65,6 +62,7 @@ public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
         if (inputMessage.photo() != null) {
             try {
                 handlePhoto(inputMessage, adminTelegramBot);
+
             } catch (UtiliedBotExceptions e) {
                 log.error(Errors.errors.get("HANDLE_PHOTO_ERROR"), e);
             }
@@ -101,7 +99,6 @@ public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
     }
 
     protected void saveVideo(Message inputVideo, TelegramBot telegramBot){
-        //int num = inputVideo.video();
         GetFile getFile = new GetFile(inputVideo.video().fileId());
         GetFileResponse file = telegramBot.execute(getFile);
         try {
@@ -113,7 +110,6 @@ public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
     }
 
     protected void saveVideoNote(Message inputVideo, TelegramBot telegramBot){
-        //int num = inputVideo.video();
         GetFile getFile = new GetFile(inputVideo.videoNote().fileId());
         GetFileResponse file = telegramBot.execute(getFile);
         try {
@@ -129,6 +125,10 @@ public class BaseBotAction extends ScreenReplyMarkup implements BaseBotActions {
         if (inputVideo.fileSize() != null) {
             telegramBot.execute(new SendVideo(message.chat().id(), inputVideo.fileId()));
         } else throw new UtiliedBotExceptions("Error while handling video");
+    }
+
+    protected String getUserReference(Message message){
+        return "@".concat(message.chat().username());
     }
 
     protected void handleVideoNote(Message message, TelegramBot telegramBot) throws UtiliedBotExceptions {

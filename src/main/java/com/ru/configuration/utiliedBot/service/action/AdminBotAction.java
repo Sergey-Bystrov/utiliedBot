@@ -2,10 +2,7 @@ package com.ru.configuration.utiliedBot.service.action;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
-import com.pengrad.telegrambot.request.SendMessage;
-import com.pengrad.telegrambot.request.SendPhoto;
-import com.pengrad.telegrambot.request.SendVideo;
-import com.pengrad.telegrambot.request.SendVideoNote;
+import com.pengrad.telegrambot.request.*;
 import com.ru.configuration.utiliedBot.exceptions.UtiliedBotExceptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -44,22 +41,26 @@ public class AdminBotAction extends BaseBotAction {
         } else return getStartScreenReplyMarkup(chatId, "NOT_FOUND");
     }
 
-    protected void handlePhoto(File file) throws UtiliedBotExceptions {
+    protected void handlePhoto(File file, String contact) throws UtiliedBotExceptions {
         if (file != null) {
             adminTelegramBot.execute(new SendPhoto(adminBotChatId, file));
+            adminTelegramBot.execute(new SendMessage(adminBotChatId, contact));
+            //adminTelegramBot.execute(new SendContact(adminBotChatId, userContact.getPhoneNumber(), userContact.getFirstName()));
         } else throw new UtiliedBotExceptions("Error while processing photo");
     }
     //todo тут падал в runtime exception
-    protected void handleVideo(File file) throws UtiliedBotExceptions {
+    protected void handleVideo(File file, String contact) throws UtiliedBotExceptions {
         if (file != null) {
             adminTelegramBot.execute(new SendVideo(adminBotChatId, file));
-        } else throw new UtiliedBotExceptions("Error while processing photo");
+            adminTelegramBot.execute(new SendMessage(adminBotChatId, contact));
+        } else throw new UtiliedBotExceptions("Error while processing video");
     }
 
-    protected void handleVideoNote(File file) throws UtiliedBotExceptions {
+    protected void handleVideoNote(File file, String contact) throws UtiliedBotExceptions {
         if (file != null) {
             adminTelegramBot.execute(new SendVideoNote(adminBotChatId, file));
-        } else throw new UtiliedBotExceptions("Error while processing photo");
+            adminTelegramBot.execute(new SendMessage(adminBotChatId, contact));
+        } else throw new UtiliedBotExceptions("Error while processing videoNote");
     }
 
 

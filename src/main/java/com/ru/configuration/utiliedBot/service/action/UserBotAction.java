@@ -6,19 +6,16 @@ import com.pengrad.telegrambot.model.PhotoSize;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.*;
-import com.pengrad.telegrambot.response.GetFileResponse;
 import com.ru.configuration.utiliedBot.constants.TelegrammCommands;
 import com.ru.configuration.utiliedBot.enums.UtilType;
 import com.ru.configuration.utiliedBot.exceptions.UtiliedBotExceptions;
 import com.ru.configuration.utiliedBot.repository.Addresses;
 import com.ru.configuration.utiliedBot.repository.MessagesForUser;
 import com.ru.configuration.utiliedBot.service.messages.MultipleTypesMessageInterface;
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 
 import static com.ru.configuration.utiliedBot.enums.Location.KOSTROMA;
@@ -79,27 +76,27 @@ public class UserBotAction extends BaseBotAction {
     }
     @Override
     protected AbstractSendRequest handleUpdates(com.pengrad.telegrambot.model.Update update, TelegramBot telegramBot) {
+
         Message inputMessage = update.message();
+        String userContact = getUserReference(inputMessage);
         if (inputMessage.photo() != null) {
             savePhoto(inputMessage, userTelegramBot);
             try {
-                adminBotAction.handlePhoto(new File(TelegrammCommands.PHOTO_PATH));
+                adminBotAction.handlePhoto(new File(TelegrammCommands.PHOTO_PATH), userContact);
             } catch (UtiliedBotExceptions e) {
                 //log.error(Errors.errors.get("HANDLE_PHOTO_ERROR"), e);
             }
         } else if (inputMessage.video() != null) {
             saveVideo(inputMessage, userTelegramBot);
             try {
-                adminBotAction.handleVideo(new File(TelegrammCommands.VIDEO_PATH));
-                //handleVideo(inputMessage,adminTelegramBot);
+                adminBotAction.handleVideo(new File(TelegrammCommands.VIDEO_PATH), userContact);
             } catch (UtiliedBotExceptions e) {
                 //log.error(Errors.errors.get("HANDLE_VIDEO_ERROR"), e);
             }
         } else if(inputMessage.videoNote() != null){
             saveVideoNote(inputMessage, userTelegramBot);
             try {
-                adminBotAction.handleVideoNote(new File(TelegrammCommands.VIDEO_PATH));
-                //handleVideoNote(inputMessage,adminTelegramBot);
+                adminBotAction.handleVideoNote(new File(TelegrammCommands.VIDEO_PATH), userContact);
             } catch (UtiliedBotExceptions e) {
                 //log.error(Errors.errors.get("HANDLE_VIDEO_ERROR"), e);
             }
