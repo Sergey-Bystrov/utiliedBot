@@ -79,7 +79,7 @@ public enum Price {
         this.title = title;
         this.name = name;
         this.measure = "кг";
-        this.currency = "руб.";
+        this.currency = "руб";
     }
 
     Price(int type, String title, String name, ReplyInterface<AdminMarkup> reply) {
@@ -87,7 +87,7 @@ public enum Price {
         this.title = title;
         this.name = name;
         this.measure = "кг";
-        this.currency = "руб.";
+        this.currency = "руб";
         this.reply = reply;;
     }
 
@@ -96,7 +96,7 @@ public enum Price {
         this.title = title;
         this.name = name;
         this.measure = "кг";
-        this.currency = "руб.";
+        this.currency = "руб";
         this.changePriceFunction = changePriceFunction;
         this.reply = reply;
     }
