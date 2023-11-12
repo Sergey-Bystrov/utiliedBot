@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 
 @Service
 public class PriceMessageService implements MultipleTypesMessageInterface<UtilType> {
-    private PricesLoader pricesLoader;
+    private final PricesLoader pricesLoader;
     @Autowired
     public PriceMessageService(PricesLoader pricesLoader) {
         this.pricesLoader = pricesLoader;

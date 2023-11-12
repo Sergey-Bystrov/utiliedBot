@@ -3,6 +3,7 @@ package com.ru.configuration.utiliedBot.service.action;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.*;
 import com.ru.configuration.utiliedBot.enums.AdminTelegramCommands;
+import com.ru.configuration.utiliedBot.enums.Catalog;
 import com.ru.configuration.utiliedBot.enums.Price;
 import com.ru.configuration.utiliedBot.enums.UtilType;
 import com.ru.configuration.utiliedBot.exceptions.UtiliedBotExceptions;
@@ -26,7 +27,12 @@ public class AdminBotAction extends BaseBotAction {
     private MultipleTypesMessageInterface<UtilType> priceMessageService;
     private PricesLoader pricesLoader;
 
-    private List<AdminTelegramCommands> telegramCommands = Arrays.stream(AdminTelegramCommands.values())
+    private final List<AdminTelegramCommands> telegramCommands = Arrays.stream(AdminTelegramCommands.values())
+            .collect(Collectors.toList());
+    private final List<Catalog> catalog = Arrays.stream(Catalog.values())
+            .collect(Collectors.toList());
+    private final List<String> catalogCommands = catalog.stream()
+            .map(Catalog::getCommand)
             .collect(Collectors.toList());
     private final List<String> infoCommands = telegramCommands.stream()
             .map(AdminTelegramCommands::getCommand)
@@ -64,6 +70,8 @@ public class AdminBotAction extends BaseBotAction {
         Optional<SendMessage> result = Optional.empty();
         if (infoCommands.contains(text)) {
             result = getReplyForAdminInfoCommand(chatId, text);
+        } else if (catalogCommands.contains(text)) {
+            result = getReplyForCatalogCommand(chatId, text);
         } else if (priceChangeCommands.contains(text)) {
             result = getReplyForAdminChangePriceCommand(chatId, text);
         } else if (TextUtils.isNumeric(text) && toChange != null) {
@@ -93,6 +101,20 @@ public class AdminBotAction extends BaseBotAction {
         return telegramCommands.stream()
                 .filter(c -> c.getCommand().equals(actualMessage))
                 .map(c -> c.getReply().get(chatId, actualMessage, adminMarkup))
+                .findFirst();
+    }
+
+    /**
+     * Метод с помощью сервиса <b>priceMessageService</b> в переменную message заносит сообщение с прайсом для категории
+     * отходов.
+     * @param chatId - id чата, в который необходимо отдать ответ
+     * @param text - текст сообщения, полученного от пользователя
+     * @return Optional<SendMessage> - Объект ответа пользователю
+     */
+    private Optional<SendMessage> getReplyForCatalogCommand(long chatId, String text) {
+        return catalog.stream()
+                .filter(c -> c.getCommand().equals(text))
+                .map(c -> c.getReply().get(chatId, text, adminMarkup))
                 .findFirst();
     }
 
