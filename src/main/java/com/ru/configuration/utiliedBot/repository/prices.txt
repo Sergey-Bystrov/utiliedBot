@@ -1,10 +1,10 @@
-cardboard=5
 officePaper=8
 booksEtc=6
-bottle=12
 householdChemicalBottles=12
-cansBarrels=12
-lid=15
+lid=10
+cardboard=5
 stratch=15
+bottle=12
+cansBarrels=12
 coloredMembrane=12
 pvd=15
